@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 16:12:47 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/06 17:03:38 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/16 15:30:02 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_push_cell(t_cell **p, int val)
 	}
 }
 
-void	ft_push_line(t_line **p, t_cell **cell, int y)
+void	ft_push_line(t_line **p, t_cell **cell, int y, int x)
 {
 	t_line	*element;
 	t_line	*temp;
@@ -43,6 +43,7 @@ void	ft_push_line(t_line **p, t_cell **cell, int y)
 	if (!element)
 		write(1, "Error\nMalloc fail in ft_push\n", 29);
 	element->y = y;
+	element->width = x;
 	element->cells = *cell;
 	element->next = NULL;
 	if (!temp)

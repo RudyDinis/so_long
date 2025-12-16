@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 16:05:59 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/06 19:35:39 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/16 18:56:14 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,19 @@ typedef struct s_cell
 	struct s_cell	*next;
 }	t_cell;
 
+typedef struct s_arg{
+	int	y;
+	int	width;
+	int	height;
+}	t_arg;
+
 typedef struct s_line
 {
 	int				y;
+	int				width;
 	t_cell			*cells;
 	struct s_line	*next;
 }	t_line;
-
-typedef struct s_map
-{
-	t_line	*lines;
-}	t_map;
 
 typedef struct s_data
 {
@@ -52,19 +54,11 @@ typedef struct s_data
 	int		endian;
 }	t_data;
 
-typedef struct s_square
-{
-	int	x;
-	int	y;
-	int	size_x;
-	int	size_y;
-}	t_square;
-
 typedef struct s_anim
 {
 	void			*mlx;
 	void			*win;
-	void			*imgs[11];
+	void			*img[11];
 	int				frame;
 	unsigned long	last_ms;
 	int				interval_ms;
@@ -75,15 +69,25 @@ typedef struct s_anim
 typedef struct s_vars {
 	void	*mlx;
 	void	*mlx_win;
+	t_line	**line;
+	int		height;
 	t_anim	*sprite;
 }				t_vars;
 
-void	map(char *arg, t_line **line);
+typedef struct s_vars_map {
+	int	p;
+	int	e;
+	int	c;
+}	t_vars_map;
+
+int		map(char *arg, t_line **line);
 void	ft_push_cell(t_cell **p, int val);
-void	ft_push_line(t_line **p, t_cell **cell, int y);
+void	ft_push_line(t_line **p, t_cell **cell, int y, int x);
 void	ft_view_line(t_line *p);
 int		check_line(t_cell *cell);
 int		check_map(t_line *line);
 t_anim	*setup_animation(void *mlx, void *win);
+void	draw_map(t_vars vars, t_line **line, int height);
+void	setup_sprite(t_vars vars, t_line **line);
 
 #endif

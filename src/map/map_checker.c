@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/06 17:08:27 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/06 18:37:57 by rdinis           ###   ########.fr       */
+/*   Created: 2025/12/16 18:54:20 by rdinis            #+#    #+#             */
+/*   Updated: 2025/12/16 18:59:50 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,22 @@ int	check_line(t_cell *cell)
 	return (1);
 }
 
+int	check_cell(char value)
+{
+	if (value == '0')
+		return (1);
+	else if (value == '1')
+		return (1);
+	else if (value == 'C')
+		return (1);
+	else if (value == 'E')
+		return (1);
+	else if (value == 'P')
+		return (1);
+	else
+		return (-1);
+}
+
 int	check_side(t_cell *cell)
 {
 	if (!cell)
@@ -44,8 +60,7 @@ int	check_side(t_cell *cell)
 		return (-1);
 	while (cell->next)
 	{
-		if (cell->value != '0' && cell->value != '1'
-			&& cell->value != 'C' && cell->value != 'E' && cell->value != 'P')
+		if (check_cell(cell->value) == -1)
 			return (-1);
 		cell = cell->next;
 	}
@@ -56,12 +71,14 @@ int	check_side(t_cell *cell)
 
 int	check_map(t_line *line)
 {
-	int	res;
-	int	len;
-	int	expected_len;
+	int		res;
+	int		len;
+	int		expected_len;
+	t_line	*tmp;
 
 	res = 0;
 	expected_len = -1;
+	tmp = line;
 	while (line && res != -1)
 	{
 		len = line_length(line->cells);
@@ -75,5 +92,7 @@ int	check_map(t_line *line)
 			res = check_side(line->cells);
 		line = line->next;
 	}
+	if (check_condition(tmp) == -1)
+		return (-1);
 	return (res);
 }
