@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 16:05:59 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/16 18:56:14 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/18 14:09:32 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,13 @@ int		check_map(t_line *line);
 t_anim	*setup_animation(void *mlx, void *win);
 void	draw_map(t_vars vars, t_line **line, int height);
 void	setup_sprite(t_vars vars, t_line **line);
+int		check_condition(t_line *line);
+void	left_top(t_data img, t_vars vars, int x, int y);
+void	left_bottom(t_data img, t_vars vars, int x, int y);
+void	right_bottom(t_data img, t_vars vars, int x, int y);
+void	right_top(t_data img, t_vars vars, int x, int y);
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	horizontal(t_data img, t_vars vars, int x, int y);
+void	verticale(t_data img, t_vars vars, int x, int y);
 
 #endif

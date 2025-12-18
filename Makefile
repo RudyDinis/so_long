@@ -2,7 +2,8 @@ NAME = so_long
 LIBFT = src/utils/libft
 SRC = src/utils/gnl/get_next_line_utils.c src/utils/gnl/get_next_line.c \
 		src/main.c src/map/map_checker.c src/map/map.c src/utils/pile/push.c src/utils/pile/view.c \
-		src/sprite/sprite.c src/map/draw_map.c
+		src/sprite/sprite.c src/map/draw_map.c src/map/check_condition.c src/map/wall/angle.c \
+		src/map/wall/line.c
 
 OBJ := $(SRC:%.c=%.o)
 
