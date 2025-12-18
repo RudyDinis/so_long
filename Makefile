@@ -8,7 +8,7 @@ SRC = src/utils/gnl/get_next_line_utils.c src/utils/gnl/get_next_line.c \
 OBJ := $(SRC:%.c=%.o)
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I . -Imlx_linux
+CFLAGS = -I . -Imlx_linux
 
 all: $(NAME)
 

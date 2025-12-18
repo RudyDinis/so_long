@@ -6,47 +6,59 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 16:06:01 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/16 17:12:04 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/18 19:48:49 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-int	init_line(char *str, int y, t_line **line)
-{
-	t_cell	*cell;
-	int		i;
-
-	cell = NULL;
-	i = 0;
-	while (str[i] && str[i] != '\n')
-	{
-		ft_push_cell(&cell, str[i]);
-		i++;
-	}
-	ft_push_line(line, &cell, y, i);
-	return (0);
-}
 
 
-int	map(char *arg, t_line **line)
+int	count_lines(char *file)
 {
 	int		fd;
-	char	*linebuffer;
-	int		y;
+	int		count;
+	char	*line;
 
-	fd = open(arg, O_RDONLY);
-	linebuffer = "t";
-	y = 0;
-	while (linebuffer != NULL)
+	fd = open(file, O_RDONLY);
+	count = 0;
+	while ((line = get_next_line(fd)))
 	{
-		linebuffer = get_next_line(fd);
-		if (linebuffer == NULL)
-			break ;
-		init_line(linebuffer, y, line);
-		free(linebuffer);
-		y++;
+		count++;
+		free(line);
 	}
 	close(fd);
-	return (y);
+	return (count);
+}
+
+char	**alloc_map(int height)
+{
+	char	**map;
+
+	map = malloc(sizeof(char *) * (height + 1));
+	if (!map)
+		return (NULL);
+	map[height] = NULL;
+	return (map);
+}
+
+char	**load_map(char *file, int *height)
+{
+	int		fd;
+	int		i;
+	char	*line;
+	char	**map;
+
+	*height = count_lines(file);
+	map = alloc_map(*height);
+	fd = open(file, O_RDONLY);
+	i = 0;
+	while ((line = get_next_line(fd)))
+	{
+		map[i] = ft_strtrim(line, "\n");
+		free(line);
+		i++;
+	}
+	close(fd);
+	return (map);
 }

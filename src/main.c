@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:32:36 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/16 18:46:11 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/18 19:50:04 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	reload(t_vars *vars)
 {
 	mlx_clear_window(vars->mlx, vars->mlx_win);
-	draw_map(*vars, vars->line, vars->height);
+	draw_map(*vars);
 }
 
 int	key_clic(int keycode, void *param)
@@ -61,23 +61,20 @@ int	close_hook(int keycode, void *param)
 int	main(int argc, char **argv)
 {
 	t_vars		vars;
-	t_line		*line;
 	int			height;
+	char		**map;
 
-	line = NULL;
 	if (argc != 2)
 		return (write(2, "Error\nYou need one arg\n", 23));
-	height = map(argv[1], &line);
-	if (check_map(line) == -1)
+	vars.map = load_map(argv[1], &height);
+	if (check_map(vars.map) == -1)
 		return (write(2, "Error\nMap not valid\n", 20));
 	vars.mlx = mlx_init();
-	vars.mlx_win = mlx_new_window(vars.mlx, line->width * 31, height * 31, "");
+	vars.mlx_win = mlx_new_window(vars.mlx, ft_strlen(vars.map[0]) * 31
+			, count_lines(vars.map) * 31, "");
 	vars.sprite = setup_animation(vars.mlx, vars.mlx_win);
-	vars.height = height;
-	vars.line = &line;
-	setup_sprite(vars, &line);
-	ft_view_line(line);
-	draw_map(vars, &line, height);
+	//setup_sprite(vars, &line);
+	draw_map(vars);
 	mlx_key_hook(vars.mlx_win, key_clic, &vars);
 	mlx_hook(vars.mlx_win, 17, 0, close_hook, &vars);
 	mlx_loop(vars.mlx);

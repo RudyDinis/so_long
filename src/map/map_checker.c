@@ -6,35 +6,12 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:54:20 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/16 18:59:50 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/18 19:43:39 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-static int	line_length(t_cell *cell)
-{
-	int	len;
-
-	len = 0;
-	while (cell)
-	{
-		len++;
-		cell = cell->next;
-	}
-	return (len);
-}
-
-int	check_line(t_cell *cell)
-{
-	while (cell)
-	{
-		if (cell->value != '1')
-			return (-1);
-		cell = cell->next;
-	}
-	return (1);
-}
 
 int	check_cell(char value)
 {
@@ -52,47 +29,54 @@ int	check_cell(char value)
 		return (-1);
 }
 
-int	check_side(t_cell *cell)
+int	check_rectangular(char **map)
 {
-	if (!cell)
-		return (-1);
-	if (cell->value != '1')
-		return (-1);
-	while (cell->next)
+	int	i;
+	int	len;
+
+	len = ft_strlen(map[0]);
+	i = 0;
+	while (map[i])
 	{
-		if (check_cell(cell->value) == -1)
+		if ((int)ft_strlen(map[i]) != len)
 			return (-1);
-		cell = cell->next;
+		i++;
 	}
-	if (cell->value != '1')
-		return (-1);
 	return (1);
 }
 
-int	check_map(t_line *line)
+int	check_side(char **map)
 {
-	int		res;
-	int		len;
-	int		expected_len;
-	t_line	*tmp;
+	int	x;
+	int	y;
+	int	height;
+	int	width;
 
-	res = 0;
-	expected_len = -1;
-	tmp = line;
-	while (line && res != -1)
+	x = 0;
+	y = 1;
+	height = 0;
+	while (map[height])
+		height++;
+	width = ft_strlen(map[0]);
+	while (x < width)
 	{
-		len = line_length(line->cells);
-		if (expected_len == -1)
-			expected_len = len;
-		else if (len != expected_len)
+		if (map[0][x] != '1' || map[height - 1][x] != '1')
 			return (-1);
-		if (line->y == 0 || line->next == NULL)
-			res = check_line(line->cells);
-		else
-			res = check_side(line->cells);
-		line = line->next;
+		x++;
 	}
-	if (check_condition(tmp) == -1)
+	while (y < height)
+	{
+		if (map[y][0] != '1' || map[y][width - 1] != '1')
+			return (-1);
+		y++;
+	}
+	return (1);
+}
+
+int	check_map(char **map)
+{
+	if (check_rectangular(map) == -1)
 		return (-1);
-	return (res);
+	if (check_side(map) == -1)
+		return (-1);
 }

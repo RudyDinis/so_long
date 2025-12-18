@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 16:05:59 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/18 14:09:32 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/18 19:47:42 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ typedef struct s_anim
 typedef struct s_vars {
 	void	*mlx;
 	void	*mlx_win;
-	t_line	**line;
-	int		height;
+	char	**map;
 	t_anim	*sprite;
 }				t_vars;
 
@@ -84,8 +83,7 @@ int		map(char *arg, t_line **line);
 void	ft_push_cell(t_cell **p, int val);
 void	ft_push_line(t_line **p, t_cell **cell, int y, int x);
 void	ft_view_line(t_line *p);
-int		check_line(t_cell *cell);
-int		check_map(t_line *line);
+int		check_map(char **map);
 t_anim	*setup_animation(void *mlx, void *win);
 void	draw_map(t_vars vars, t_line **line, int height);
 void	setup_sprite(t_vars vars, t_line **line);
@@ -97,5 +95,7 @@ void	right_top(t_data img, t_vars vars, int x, int y);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void	horizontal(t_data img, t_vars vars, int x, int y);
 void	verticale(t_data img, t_vars vars, int x, int y);
+char	**load_map(char *file, int *height);
+int		count_lines(char *file);
 
 #endif
