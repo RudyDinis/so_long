@@ -31,7 +31,8 @@ typedef struct s_cell
 	struct s_cell	*next;
 }	t_cell;
 
-typedef struct s_arg{
+typedef struct s_arg
+{
 	int	y;
 	int	width;
 	int	height;
@@ -66,27 +67,30 @@ typedef struct s_anim
 	int				x;
 }	t_anim;
 
-typedef struct s_vars {
+typedef struct s_vars
+{
 	void	*mlx;
 	void	*mlx_win;
 	char	**map;
+	int		height;
+	t_data	img;
 	t_anim	*sprite;
 }				t_vars;
 
-typedef struct s_vars_map {
+typedef struct s_vars_map
+{
 	int	p;
 	int	e;
 	int	c;
 }	t_vars_map;
 
-int		map(char *arg, t_line **line);
 void	ft_push_cell(t_cell **p, int val);
 void	ft_push_line(t_line **p, t_cell **cell, int y, int x);
 void	ft_view_line(t_line *p);
 int		check_map(char **map);
 t_anim	*setup_animation(void *mlx, void *win);
-void	draw_map(t_vars vars, t_line **line, int height);
-void	setup_sprite(t_vars vars, t_line **line);
+t_data	draw_map(t_vars vars);
+void	setup_sprite(t_vars vars);
 int		check_condition(t_line *line);
 void	left_top(t_data img, t_vars vars, int x, int y);
 void	left_bottom(t_data img, t_vars vars, int x, int y);
@@ -94,8 +98,13 @@ void	right_bottom(t_data img, t_vars vars, int x, int y);
 void	right_top(t_data img, t_vars vars, int x, int y);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void	horizontal(t_data img, t_vars vars, int x, int y);
-void	verticale(t_data img, t_vars vars, int x, int y);
+void	vertical(t_data img, t_vars vars, int x, int y);
 char	**load_map(char *file, int *height);
 int		count_lines(char *file);
+int		is_lefttop_wall(t_vars vars, int x, int y);
+int		is_leftbottom_wall(t_vars vars, int x, int y);
+int		is_righttop_wall(t_vars vars, int x, int y);
+int		is_rightbottom_wall(t_vars vars, int x, int y);
+void	background(t_data img, t_vars vars, int x, int y);
 
 #endif

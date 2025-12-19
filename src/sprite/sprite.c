@@ -31,7 +31,8 @@ static int	animate_hook(void *param)
 	{
 		a->frame = (a->frame + 1) % 11;
 		if (a->img[a->frame])
-			mlx_put_image_to_window(a->mlx, a->win, a->img[a->frame], a->x, a->y);
+			mlx_put_image_to_window(a->mlx, a->win, a->img[a->frame],
+				a->x, a->y);
 		a->last_ms = now;
 	}
 	return (0);

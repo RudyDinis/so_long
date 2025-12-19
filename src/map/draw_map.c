@@ -12,62 +12,80 @@
 
 #include "../so_long.h"
 
-void	setup_sprite(t_vars vars, t_line **line)
+void	setup_sprite(t_vars vars)
 {
-	t_line	*tmp_line;
-	t_cell	*tmp_cell;
-	int		y;
-	int		x;
-
-	tmp_line = *line;
-	y = 0;
-	while (tmp_line)
-	{
-		tmp_cell = tmp_line->cells;
-		x = 0;
-		while (tmp_cell)
-		{
-			if (tmp_cell->value == 'P')
-			{
-				vars.sprite->x = x + 1;
-				vars.sprite->y = y + 1;
-			}
-			x += 31;
-			tmp_cell = tmp_cell->next;
-		}
-		tmp_line = tmp_line->next;
-		y += 31;
-	}
-}
-
-void	select_wall(t_data img, t_vars vars, int x, int y)
-{
-
-}
-
-void	draw_map(t_vars vars, t_line **line, int height)
-{
-	t_line	*tmp_line;
-	t_cell	*tmp_cell;
 	int		y;
 	int		x;
 	t_data	img;
 
-	img.img = mlx_new_image(vars.mlx, (*line)->width * 31, height * 31);
-	tmp_line = *line;
+	img.img = mlx_new_image(vars.mlx, ft_strlen(vars.map[0]) * 31,
+			vars.height * 31);
 	y = 0;
-	while (tmp_line)
+	while (y < vars.height && vars.map[y])
 	{
-		tmp_cell = tmp_line->cells;
 		x = 0;
-		while (tmp_cell)
+		while (vars.map[y][x])
 		{
-			if (tmp_cell->value == '1')
-				select_wall(img, vars, x, y);
-			x += 31;
-			tmp_cell = tmp_cell->next;
+			if (vars.map[y][x] == 'P')
+			{
+				vars.sprite->x = x * 31;
+				vars.sprite->y = y * 31;
+			}
+			x++;
 		}
-		tmp_line = tmp_line->next;
-		y += 31;
+		y++;
 	}
+}
+
+int	is_vertical_wall(t_vars vars, int x, int y)
+{
+	char	left;
+	char	right;
+
+	if (x <= 0 || x >= ft_strlen(vars.map[y]) - 1)
+		return (1);
+	left = vars.map[y][x - 1];
+	right = vars.map[y][x + 1];
+	if (left == '0' && right == '0')
+		return (1);
+	return (0);
+}
+
+void	select_wall(t_data img, t_vars vars, int x, int y)
+{
+	if (is_lefttop_wall(vars, x, y))
+		left_top(img, vars, x * 31, y * 31);
+	else if (is_leftbottom_wall(vars, x, y))
+		left_bottom(img, vars, x * 31, y * 31);
+	else if (is_righttop_wall(vars, x, y))
+		right_top(img, vars, x * 31, y * 31);
+	else if (is_rightbottom_wall(vars, x, y))
+		right_bottom(img, vars, x * 31, y * 31);
+	else if (is_vertical_wall(vars, x, y))
+		vertical(img, vars, x * 31, y * 31);
+	else
+		horizontal(img, vars, x * 31, y * 31);
+}
+
+t_data	draw_map(t_vars vars)
+{
+	int		y;
+	int		x;
+	t_data	img;
+
+	img.img = mlx_new_image(vars.mlx, ft_strlen(vars.map[0]) * 31,
+			vars.height * 31);
+	y = 0;
+	while (y < vars.height && vars.map[y])
+	{
+		x = 0;
+		while (vars.map[y][x])
+		{
+			if (vars.map[y][x] == '1')
+				select_wall(img, vars, x, y);
+			x++;
+		}
+		y++;
+	}
+	return (img);
 }

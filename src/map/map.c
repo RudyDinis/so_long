@@ -12,8 +12,6 @@
 
 #include "../so_long.h"
 
-
-
 int	count_lines(char *file)
 {
 	int		fd;
@@ -21,11 +19,15 @@ int	count_lines(char *file)
 	char	*line;
 
 	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (0);
 	count = 0;
-	while ((line = get_next_line(fd)))
+	line = get_next_line(fd);
+	while (line)
 	{
 		count++;
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (count);
@@ -52,12 +54,16 @@ char	**load_map(char *file, int *height)
 	*height = count_lines(file);
 	map = alloc_map(*height);
 	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (NULL);
 	i = 0;
-	while ((line = get_next_line(fd)))
+	line = get_next_line(fd);
+	while (line)
 	{
 		map[i] = ft_strtrim(line, "\n");
 		free(line);
 		i++;
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (map);

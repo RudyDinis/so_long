@@ -14,8 +14,9 @@
 
 void	reload(t_vars *vars)
 {
-	mlx_clear_window(vars->mlx, vars->mlx_win);
-	draw_map(*vars);
+	background(vars->img, *vars, vars->sprite->x, vars->sprite->y);
+	//mlx_clear_window(vars->mlx, vars->mlx_win);
+	//draw_map(*vars);
 }
 
 int	key_clic(int keycode, void *param)
@@ -67,14 +68,15 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 		return (write(2, "Error\nYou need one arg\n", 23));
 	vars.map = load_map(argv[1], &height);
+	vars.height = height;
 	if (check_map(vars.map) == -1)
 		return (write(2, "Error\nMap not valid\n", 20));
 	vars.mlx = mlx_init();
-	vars.mlx_win = mlx_new_window(vars.mlx, ft_strlen(vars.map[0]) * 31
-			, count_lines(vars.map) * 31, "");
+	vars.mlx_win = mlx_new_window(vars.mlx, ft_strlen(vars.map[0]) * 31,
+			height * 31, "");
 	vars.sprite = setup_animation(vars.mlx, vars.mlx_win);
-	//setup_sprite(vars, &line);
-	draw_map(vars);
+	setup_sprite(vars);
+	vars.img = draw_map(vars);
 	mlx_key_hook(vars.mlx_win, key_clic, &vars);
 	mlx_hook(vars.mlx_win, 17, 0, close_hook, &vars);
 	mlx_loop(vars.mlx);

@@ -12,7 +12,6 @@
 
 #include "../so_long.h"
 
-
 int	check_cell(char value)
 {
 	if (value == '0')
