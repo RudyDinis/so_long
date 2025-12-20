@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:54:20 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/18 19:43:39 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/20 18:07:09 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,5 @@ int	check_map(char **map)
 		return (-1);
 	if (check_side(map) == -1)
 		return (-1);
+	return (1);
 }

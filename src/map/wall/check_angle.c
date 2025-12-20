@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 13:13:55 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/18 14:48:52 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/20 18:48:48 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ int	is_lefttop_wall(t_vars vars, int x, int y)
 		left = vars.map[y][x - 1];
 	if (y > 0)
 		top = vars.map[y - 1][x];
-	if ((left == '0' || left == ' ') && (top == '0' || top == ' '))
+	if (is_endtop(vars, x, y) == 1)
+		return (0);
+	if (is_endleft(vars, x, y) == 1)
+		return (0);
+	if (left != '1' && top != '1')
 		return (1);
 	return (0);
 }
@@ -43,7 +47,11 @@ int	is_leftbottom_wall(t_vars vars, int x, int y)
 		left = vars.map[y][x - 1];
 	if (y < vars.height - 1)
 		bottom = vars.map[y + 1][x];
-	if ((left == '0' || left == ' ') && (bottom == '0' || bottom == ' '))
+	if (is_endbottom(vars, x, y) == 1)
+		return (0);
+	if (is_endleft(vars, x, y) == 1)
+		return (0);
+	if (left != '1' && bottom != '1')
 		return (1);
 	return (0);
 }
@@ -61,7 +69,11 @@ int	is_righttop_wall(t_vars vars, int x, int y)
 		left = vars.map[y][x + 1];
 	if (y > 0)
 		top = vars.map[y - 1][x];
-	if ((left == '0' || left == ' ') && (top == '0' || top == ' '))
+	if (is_endtop(vars, x, y) == 1)
+		return (0);
+	if (is_endright(vars, x, y) == 1)
+		return (0);
+	if (left != '1' && top != '1')
 		return (1);
 	return (0);
 }
@@ -79,7 +91,11 @@ int	is_rightbottom_wall(t_vars vars, int x, int y)
 		left = vars.map[y][x + 1];
 	if (y < vars.height - 1)
 		bottom = vars.map[y + 1][x];
-	if ((left == '0' || left == ' ') && (bottom == '0' || bottom == ' '))
+	if (is_endbottom(vars, x, y) == 1)
+		return (0);
+	if (is_endright(vars, x, y) == 1)
+		return (0);
+	if (left != '1' && bottom != '1')
 		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 13:13:55 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/18 14:48:52 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/20 18:37:51 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@ void	setup_sprite(t_vars vars)
 {
 	int		y;
 	int		x;
-	t_data	img;
 
-	img.img = mlx_new_image(vars.mlx, ft_strlen(vars.map[0]) * 31,
-			vars.height * 31);
 	y = 0;
 	while (y < vars.height && vars.map[y])
 	{
@@ -46,6 +43,10 @@ int	is_vertical_wall(t_vars vars, int x, int y)
 		return (1);
 	left = vars.map[y][x - 1];
 	right = vars.map[y][x + 1];
+	if (is_endtop(vars, x, y) == 1)
+		return (0);
+	if (is_endbottom(vars, x, y) == 1)
+		return (0);
 	if (left == '0' && right == '0')
 		return (1);
 	return (0);
@@ -63,6 +64,14 @@ void	select_wall(t_data img, t_vars vars, int x, int y)
 		right_bottom(img, vars, x * 31, y * 31);
 	else if (is_vertical_wall(vars, x, y))
 		vertical(img, vars, x * 31, y * 31);
+	else if (is_endbottom(vars, x, y))
+		end_bottom(img, vars, x * 31, y * 31);
+	else if (is_endtop(vars, x, y))
+		end_top(img, vars, x * 31, y * 31);
+	else if (is_endright(vars, x, y))
+		end_right(img, vars, x * 31, y * 31);
+	else if (is_endleft(vars, x, y))
+		end_left(img, vars, x * 31, y * 31);
 	else
 		horizontal(img, vars, x * 31, y * 31);
 }
