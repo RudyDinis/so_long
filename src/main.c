@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:32:36 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/20 18:59:25 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/22 14:11:30 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,20 @@ void	moove(t_vars *vars, int pos)
 	if (pos == 1 && (vars->map[(vars->sprite->y / 31)]
 			[(vars->sprite->x / 31) + 1] != '1'))
 	{
-		vars->sprite->x += 31;
 		background(vars->img, *vars, vars->sprite->x, vars->sprite->y);
+		vars->sprite->x += 31;
 	}
 	if (pos == 2 && (vars->map[(vars->sprite->y / 31) - 1]
 			[vars->sprite->x / 31] != '1'))
 	{
-		vars->sprite-> y -= 31;
 		background(vars->img, *vars, vars->sprite->x, vars->sprite->y);
+		vars->sprite-> y -= 31;
 	}
 	if (pos == 3 && (vars->map[(vars->sprite->y / 31) + 1]
 			[vars->sprite->x / 31] != '1'))
 	{
-		vars->sprite->y += 31;
 		background(vars->img, *vars, vars->sprite->x, vars->sprite->y);
+		vars->sprite->y += 31;
 	}
 }
 
@@ -46,21 +46,13 @@ int	key_clic(int keycode, void *param)
 
 	vars = (t_vars *)param;
 	if (keycode == 97)
-	{
 		moove(vars, 0);
-	}
 	else if (keycode == 100)
-	{
 		moove(vars, 1);
-	}
 	else if (keycode == 119)
-	{
 		moove(vars, 2);
-	}
 	else if (keycode == 115)
-	{
 		moove(vars, 3);
-	}
 	return (0);
 }
 

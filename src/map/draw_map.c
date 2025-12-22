@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 13:13:55 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/20 18:37:51 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/22 19:50:46 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,6 @@ void	setup_sprite(t_vars vars)
 	}
 }
 
-int	is_vertical_wall(t_vars vars, int x, int y)
-{
-	char	left;
-	char	right;
-
-	if (x <= 0 || x >= ft_strlen(vars.map[y]) - 1)
-		return (1);
-	left = vars.map[y][x - 1];
-	right = vars.map[y][x + 1];
-	if (is_endtop(vars, x, y) == 1)
-		return (0);
-	if (is_endbottom(vars, x, y) == 1)
-		return (0);
-	if (left == '0' && right == '0')
-		return (1);
-	return (0);
-}
-
 void	select_wall(t_data img, t_vars vars, int x, int y)
 {
 	if (is_lefttop_wall(vars, x, y))
@@ -76,6 +58,33 @@ void	select_wall(t_data img, t_vars vars, int x, int y)
 		horizontal(img, vars, x * 31, y * 31);
 }
 
+void	collectible(t_data img, t_vars vars, int x, int y)
+{
+	int			size_y;
+	int			size_x;
+	int			cx;
+	int			cy;
+
+	size_y = y + 31;
+	size_x = x + 31;
+	cx = x + 15;
+	cy = y + 15;
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel,
+			&img.line_length, &img.endian);
+	while (x < size_x)
+	{
+		y = size_y - 31;
+		while (y < size_y)
+		{
+			if ((x - cx) * (x - cx) + (y - cy) * (y - cy) <= 5 * 5)
+				my_mlx_pixel_put(&img, x, y, 0x00FFFFFF);
+			y++;
+		}
+		x++;
+	}
+	mlx_put_image_to_window(vars.mlx, vars.mlx_win, img.img, 0, 0);
+}
+
 t_data	draw_map(t_vars vars)
 {
 	int		y;
@@ -92,6 +101,8 @@ t_data	draw_map(t_vars vars)
 		{
 			if (vars.map[y][x] == '1')
 				select_wall(img, vars, x, y);
+			if (vars.map[y][x] == 'C')
+				collectible(img, vars, x * 31, y * 31);
 			x++;
 		}
 		y++;

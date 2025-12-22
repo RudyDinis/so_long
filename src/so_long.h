@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 16:05:59 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/20 18:59:40 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/22 19:38:52 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	end_right(t_data img, t_vars vars, int x, int y);
 void	end_left(t_data img, t_vars vars, int x, int y);
 char	**load_map(char *file, int *height);
 int		count_lines(char *file);
+int		is_vertical_wall(t_vars vars, int x, int y);
 int		is_lefttop_wall(t_vars vars, int x, int y);
 int		is_leftbottom_wall(t_vars vars, int x, int y);
 int		is_righttop_wall(t_vars vars, int x, int y);

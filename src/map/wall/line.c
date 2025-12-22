@@ -6,11 +6,29 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 13:48:03 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/18 14:13:25 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/22 19:51:41 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../so_long.h"
+
+int	is_vertical_wall(t_vars vars, int x, int y)
+{
+	char	left;
+	char	right;
+
+	if (x <= 0 || x >= ft_strlen(vars.map[y]) - 1)
+		return (1);
+	left = vars.map[y][x - 1];
+	right = vars.map[y][x + 1];
+	if (is_endtop(vars, x, y) == 1)
+		return (0);
+	if (is_endbottom(vars, x, y) == 1)
+		return (0);
+	if (left != '1' && right != '1')
+		return (1);
+	return (0);
+}
 
 void	horizontal(t_data img, t_vars vars, int x, int y)
 {
