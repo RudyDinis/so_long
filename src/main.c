@@ -12,31 +12,61 @@
 
 #include "so_long.h"
 
-void	moove(t_vars *vars, int pos)
+void	moove(t_vars *vars, int dir)
 {
-	if (pos == 0 && (vars->map[(vars->sprite->y / 31)]
-			[(vars->sprite->x / 31) - 1] != '1'))
+	int	dx[4];
+	int	dy[4];
+	int	tx;
+	int	ty;
+
+	if (vars->sprite->moving)
+		return ;
+	dx[0] = -1;
+	dx[1] = 1;
+	dx[2] = 0;
+	dx[3] = 0;
+	dy[0] = 0;
+	dy[1] = 0;
+	dy[2] = -1;
+	dy[3] = 1;
+	tx = vars->sprite->x / 31 + dx[dir];
+	ty = vars->sprite->y / 31 + dy[dir];
+	if (vars->map[ty][tx] != '1')
 	{
-		background(vars->img, *vars, vars->sprite->x, vars->sprite->y);
-		vars->sprite->x -= 31;
+		vars->sprite->start_x = vars->sprite->x;
+		vars->sprite->start_y = vars->sprite->y;
+		vars->sprite->dir = dir;
+		vars->sprite->moving = 1;
+		vars->sprite->step = 0;
 	}
-	if (pos == 1 && (vars->map[(vars->sprite->y / 31)]
-			[(vars->sprite->x / 31) + 1] != '1'))
+}
+
+int	check_eat(t_vars *vars, int dir)
+{
+	int	dx[4];
+	int	dy[4];
+	int	tx;
+	int	ty;
+
+	dx[0] = -1;
+	dx[1] = 1;
+	dx[2] = 0;
+	dx[3] = 0;
+	dy[0] = 0;
+	dy[1] = 0;
+	dy[2] = -1;
+	dy[3] = 1;
+	tx = vars->sprite->x / 31 + dx[dir];
+	ty = vars->sprite->y / 31 + dy[dir];
+	if (vars->map[ty][tx] != '1')
 	{
-		background(vars->img, *vars, vars->sprite->x, vars->sprite->y);
-		vars->sprite->x += 31;
+		vars->moove += 1;
+		random_moove(vars);
 	}
-	if (pos == 2 && (vars->map[(vars->sprite->y / 31) - 1]
-			[vars->sprite->x / 31] != '1'))
+	if (vars->map[ty][tx] == 'C')
 	{
-		background(vars->img, *vars, vars->sprite->x, vars->sprite->y);
-		vars->sprite-> y -= 31;
-	}
-	if (pos == 3 && (vars->map[(vars->sprite->y / 31) + 1]
-			[vars->sprite->x / 31] != '1'))
-	{
-		background(vars->img, *vars, vars->sprite->x, vars->sprite->y);
-		vars->sprite->y += 31;
+		vars->map[ty][tx] = '0';
+		vars->score += 1;
 	}
 }
 
@@ -46,45 +76,37 @@ int	key_clic(int keycode, void *param)
 
 	vars = (t_vars *)param;
 	if (keycode == 97)
+	{
+		check_eat(vars, 0);
 		moove(vars, 0);
+	}
 	else if (keycode == 100)
+	{
+		check_eat(vars, 1);
 		moove(vars, 1);
+	}
 	else if (keycode == 119)
+	{
+		check_eat(vars, 2);
 		moove(vars, 2);
+	}
 	else if (keycode == 115)
+	{
+		check_eat(vars, 3);
 		moove(vars, 3);
+	}
 	return (0);
 }
 
-int	close_hook(void *param)
+int	init(t_vars *vars, char **argv)
 {
-	t_vars	*vars;
-
-	vars = param;
-	mlx_loop_end(vars->mlx);
-	if (vars->sprite)
-		clear_sprite(vars->sprite);
-	if (vars->img.img)
-		mlx_destroy_image(vars->mlx, vars->img.img);
-	mlx_destroy_window(vars->mlx, vars->mlx_win);
-	mlx_destroy_display(vars->mlx);
-	free(vars->mlx);
-	free_map(vars->map);
-	free(vars);
-	exit(0);
-}
-
-int	main(int argc, char **argv)
-{
-	t_vars	*vars;
 	int		height;
 	char	**map;
+	int		x;
+	int		y;
 
-	if (argc != 2)
-		return (write(2, "Error\nYou need one arg\n", 23));
-	vars = malloc(sizeof(t_vars));
-	if (!vars)
-		return (1);
+	x = 0;
+	y = 0;
 	vars->map = load_map(argv[1], &height);
 	vars->height = height;
 	if (check_map(vars->map) == -1)
@@ -93,9 +115,31 @@ int	main(int argc, char **argv)
 	vars->mlx_win = mlx_new_window(vars->mlx, ft_strlen(vars->map[0]) * 31,
 			height * 31, "");
 	vars->sprite = setup_animation(vars->mlx, vars->mlx_win);
-	setup_sprite(*vars);
+	mlx_loop_hook(vars->mlx, animate_hook_var, vars);
+	setup_sprite(vars);
 	vars->img = draw_map(*vars);
+	vars->score = 0;
+	vars->moove = 0;
+	vars->ghost = NULL;
+	setup_ghost(vars, x, y);
+	return (1);
+}
+
+int	main(int argc, char **argv)
+{
+	t_vars	*vars;
+
+	if (argc != 2)
+		return (write(2, "Error\nMissing Map\n", 19));
+	vars = malloc(sizeof(t_vars));
+	if (!vars)
+		return (write(2, "Error\nMalloc fail\n", 19));
+	vars->animated_var = malloc(sizeof(t_animated_var));
+	if (!vars->animated_var)
+		return (write(2, "Error\nMalloc fail\n", 19));		
+	init(vars, argv);
 	mlx_key_hook(vars->mlx_win, key_clic, vars);
 	mlx_hook(vars->mlx_win, 17, 0, close_hook, vars);
 	mlx_loop(vars->mlx);
+	return (1);
 }

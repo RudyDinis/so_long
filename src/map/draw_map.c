@@ -12,21 +12,21 @@
 
 #include "../so_long.h"
 
-void	setup_sprite(t_vars vars)
+void	setup_sprite(t_vars *vars)
 {
 	int		y;
 	int		x;
 
 	y = 0;
-	while (y < vars.height && vars.map[y])
+	while (y < vars->height && vars->map[y])
 	{
 		x = 0;
-		while (vars.map[y][x])
+		while (vars->map[y][x])
 		{
-			if (vars.map[y][x] == 'P')
+			if (vars->map[y][x] == 'P')
 			{
-				vars.sprite->x = x * 31;
-				vars.sprite->y = y * 31;
+				vars->sprite->x = x * 31;
+				vars->sprite->y = y * 31;
 			}
 			x++;
 		}

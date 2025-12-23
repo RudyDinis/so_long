@@ -37,3 +37,21 @@ void	clear_sprite(t_anim	*a)
 	}
 	free(a);
 }
+
+void	ft_clear(t_vars *vars)
+{
+	t_ghost	*tmp;
+	t_ghost	*p;
+
+	p = vars->ghost;
+	while (p)
+	{
+		tmp = p->next;
+		if (p->img)
+			mlx_destroy_image(vars->mlx, p->img);
+		free(p);
+		p = tmp;
+	}
+	vars->ghost = NULL;
+}
+

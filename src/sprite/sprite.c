@@ -20,21 +20,51 @@ static unsigned long	now_ms(void)
 	return (tv.tv_sec * 1000UL + tv.tv_usec / 1000UL);
 }
 
-static int	animate_hook(void *param)
+int	animate_hook(t_vars	*va, t_animated_var *av)
 {
-	t_anim			*a;
-	unsigned long	now;
-
-	a = (t_anim *)param;
-	now = now_ms();
-	if (now - a->last_ms >= (unsigned long)a->interval_ms)
+	if (av->now - va->sprite->last_ms
+		>= (unsigned long) va->sprite->interval_ms)
 	{
-		a->frame = (a->frame + 1) % 11;
-		if (a->img[a->frame])
-			mlx_put_image_to_window(a->mlx, a->win, a->img[a->frame],
-				a->x, a->y);
-		a->last_ms = now;
+		va->sprite->frame = (va->sprite->frame + 1) % 11;
+		va->sprite->last_ms = av->now;
 	}
+	if (va->sprite->moving)
+	{
+		va->sprite->x += av->dx[va->sprite->dir] * av->speed;
+		va->sprite->y += av->dy[va->sprite->dir] * av->speed;
+		va->sprite->step += av->speed;
+		if (va->sprite->step >= 31)
+		{
+			va->sprite->x = va->sprite->start_x + av->dx[va->sprite->dir] * 31;
+			va->sprite->y = va->sprite->start_y + av->dy[va->sprite->dir] * 31;
+			va->sprite->moving = 0;
+			va->sprite->step = 0;
+			background(va->img, *va, va->sprite->x, va->sprite->y);
+			draw_ghosts(va);
+		}
+	}
+	mlx_put_image_to_window(va->sprite->mlx, va->sprite->win,
+		va->sprite->img[va->sprite->frame], va->sprite->x, va->sprite->y);
+	return (0);
+}
+
+int	animate_hook_var(void *param)
+{
+	t_vars			*vars;
+
+	vars = (t_vars *)param;
+	vars->animated_var->now = now_ms();
+	vars->animated_var->speed = 4;
+	vars->animated_var->dx[0] = -1;
+	vars->animated_var->dx[1] = 1;
+	vars->animated_var->dx[2] = 0;
+	vars->animated_var->dx[3] = 0;
+	vars->animated_var->dy[0] = 0;
+	vars->animated_var->dy[1] = 0;
+	vars->animated_var->dy[2] = -1;
+	vars->animated_var->dy[3] = 1;
+	animate_hook(vars, vars->animated_var);
+	draw_text(vars);
 	return (0);
 }
 
@@ -70,9 +100,10 @@ t_anim	*setup_animation(void *mlx, void *win)
 	a->x = 0;
 	a->interval_ms = 100;
 	a->last_ms = now_ms();
+	a->moving = 0;
+	a->step = 0;
 	var(mlx, a);
 	if (a->img[0])
 		mlx_put_image_to_window(mlx, win, a->img[0], a->x, a->y);
-	mlx_loop_hook(mlx, animate_hook, a);
 	return (a);
 }
