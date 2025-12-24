@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 16:05:59 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/22 19:38:52 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/24 17:00:39 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ typedef struct s_vars_map
 	int	c;
 }	t_vars_map;
 
-
 typedef struct s_vars
 {
 	void			*mlx;
@@ -91,10 +90,15 @@ typedef struct s_vars
 	long			score;
 	t_data			img;
 	t_anim			*sprite;
-	t_ghost 		*ghost;
+	t_ghost			*ghost;
 	t_animated_var	*animated_var;
 }	t_vars;
 
+typedef struct s_point
+{
+	int	x;
+	int	y;
+}	t_point;
 
 int		check_map(char **map);
 t_anim	*setup_animation(void *mlx, void *win);
@@ -130,7 +134,12 @@ void	draw_text(t_vars *vars);
 int		close_hook(void *param);
 int		setup_ghost(t_vars *vars, int x, int y);
 void	ft_clear(t_vars *vars);
-void    random_moove(t_vars *vars);
+void	random_moove(t_vars *vars);
 void	draw_ghosts(t_vars *vars);
+void	is_dead(t_vars	*vars);
+void	free_0(t_vars *vars);
+int		check_condition(char **map, int exit, int start, int collect);
+int		checkpath(char **map);
+
 
 #endif

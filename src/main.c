@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:32:36 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/22 14:11:30 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/24 16:17:25 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	moove(t_vars *vars, int dir)
 	}
 }
 
-int	check_eat(t_vars *vars, int dir)
+void	check_eat(t_vars *vars, int dir)
 {
 	int	dx[4];
 	int	dy[4];
@@ -76,25 +76,13 @@ int	key_clic(int keycode, void *param)
 
 	vars = (t_vars *)param;
 	if (keycode == 97)
-	{
-		check_eat(vars, 0);
-		moove(vars, 0);
-	}
+		return (check_eat(vars, 0), moove(vars, 0), 0);
 	else if (keycode == 100)
-	{
-		check_eat(vars, 1);
-		moove(vars, 1);
-	}
+		return (check_eat(vars, 1), moove(vars, 1), 0);
 	else if (keycode == 119)
-	{
-		check_eat(vars, 2);
-		moove(vars, 2);
-	}
+		return (check_eat(vars, 2), moove(vars, 2), 0);
 	else if (keycode == 115)
-	{
-		check_eat(vars, 3);
-		moove(vars, 3);
-	}
+		return (check_eat(vars, 3), moove(vars, 3), 0);
 	return (0);
 }
 
@@ -109,8 +97,6 @@ int	init(t_vars *vars, char **argv)
 	y = 0;
 	vars->map = load_map(argv[1], &height);
 	vars->height = height;
-	if (check_map(vars->map) == -1)
-		return (write(2, "Error\nMap not valid\n", 20));
 	vars->mlx = mlx_init();
 	vars->mlx_win = mlx_new_window(vars->mlx, ft_strlen(vars->map[0]) * 31,
 			height * 31, "");
@@ -122,6 +108,8 @@ int	init(t_vars *vars, char **argv)
 	vars->moove = 0;
 	vars->ghost = NULL;
 	setup_ghost(vars, x, y);
+	if (check_map(vars->map) == -1)
+		return (write(2, "Error\nMap not valid\n", 20), close_hook(vars));
 	return (1);
 }
 
@@ -136,7 +124,8 @@ int	main(int argc, char **argv)
 		return (write(2, "Error\nMalloc fail\n", 19));
 	vars->animated_var = malloc(sizeof(t_animated_var));
 	if (!vars->animated_var)
-		return (write(2, "Error\nMalloc fail\n", 19));		
+		return (write(2, "Error\nMalloc fail\n", 19), free_0(vars), 0);
+	srand(time(NULL));
 	init(vars, argv);
 	mlx_key_hook(vars->mlx_win, key_clic, vars);
 	mlx_hook(vars->mlx_win, 17, 0, close_hook, vars);

@@ -14,44 +14,42 @@
 
 void	draw_ghosts(t_vars *vars)
 {
-    t_ghost *g = vars->ghost;
-    while (g)
-    {
-        mlx_put_image_to_window(vars->mlx, vars->mlx_win,
-            g->img, g->x, g->y);
-        g = g->next;
-    }
+	t_ghost	*g;
+
+	g = vars->ghost;
+	while (g)
+	{
+		mlx_put_image_to_window(vars->mlx, vars->mlx_win,
+			g->img, g->x, g->y);
+		g = g->next;
+	}
 }
 
-void	select_moove(t_vars *vars, t_ghost *current)
+int	select_moove(t_vars *vars, t_ghost *current)
 {
-	int moved;
+	int	tries;
+	int	r;
 
-	moved = 0;
-	while (!moved) {
-		int r = rand() % 4;
-		if (r == 0 && vars->map[(current->y + 31) / 31][current->x / 31] != '1') {
-			current->y += 31;
-			moved = 1;
-		}
-		if (r == 1 && vars->map[(current->y - 31) / 31][current->x / 31] != '1') {
-			current->y -= 31;
-			moved = 1;
-		}
-		if (r == 2 && vars->map[current->y / 31][(current->x + 31) / 31] != '1') {
-			current->x += 31;
-			moved = 1;
-		}
-		if (r == 3 && vars->map[current->y / 31][(current->x - 31) / 31] != '1') {
-			current->x -= 31;
-			moved = 1;
-		}
+	tries = 0;
+	while (tries < 10)
+	{
+		r = rand() % 4;
+		if (r == 0 && vars->map[(current->y + 31) / 31][current->x / 31] != '1')
+			return (current->y += 31, 0);
+		if (r == 1 && vars->map[(current->y - 31) / 31][current->x / 31] != '1')
+			return (current->y -= 31, 0);
+		if (r == 2 && vars->map[current->y / 31][(current->x + 31) / 31] != '1')
+			return (current->x += 31, 0);
+		if (r == 3 && vars->map[current->y / 31][(current->x - 31) / 31] != '1')
+			return (current->x -= 31, 0);
+		tries++;
 	}
+	return (0);
 }
 
 void	random_moove(t_vars *vars)
 {
-	t_ghost *current;
+	t_ghost	*current;
 
 	current = vars->ghost;
 	while (current)
@@ -63,28 +61,40 @@ void	random_moove(t_vars *vars)
 	}
 }
 
-void	init_ghost(t_vars *vars, t_ghost *ghost, int x, int y)
+int	init_ghost(t_vars *vars, t_ghost **last, int x, int y)
 {
-	int	w;
-	int	h;
+	int		w;
+	int		h;
+	t_ghost	*new_ghost;
 
-	ghost->x = x * 31;
-	ghost->y = y * 31;
-	ghost->moving = 0;
-	ghost->dir = 0;
-	ghost->step = 0;
-	ghost->start_x = x * 31;
-	ghost->start_y = y * 31;
-	ghost->img = mlx_xpm_file_to_image(vars->mlx, "./src/textures/ghost/0.xpm", &w, &h);
-	ghost->next = NULL;
-
-	mlx_put_image_to_window(vars->mlx, vars->mlx_win, ghost->img, ghost->x, ghost->y);
+	new_ghost = malloc(sizeof(t_ghost));
+	if (!new_ghost)
+		return (write(2, "Error\nMalloc fail\n", 19), close_hook(vars), 0);
+	new_ghost->x = x * 31;
+	new_ghost->y = y * 31;
+	new_ghost->moving = 0;
+	new_ghost->dir = 0;
+	new_ghost->step = 0;
+	new_ghost->start_x = x * 31;
+	new_ghost->start_y = y * 31;
+	new_ghost->img = mlx_xpm_file_to_image(vars->mlx,
+			"./src/textures/ghost/0.xpm", &w, &h);
+	new_ghost->next = NULL;
+	mlx_put_image_to_window(vars->mlx, vars->mlx_win,
+		new_ghost->img, new_ghost->x, new_ghost->y);
+	if (!vars->ghost)
+		vars->ghost = new_ghost;
+	else
+		(*last)->next = new_ghost;
+	(*last) = new_ghost;
+	return (0);
 }
 
 int	setup_ghost(t_vars *vars, int x, int y)
 {
-	t_ghost *last = NULL;
+	t_ghost	*last;
 
+	last = NULL;
 	y = 0;
 	while (y < vars->height && vars->map[y])
 	{
@@ -93,18 +103,11 @@ int	setup_ghost(t_vars *vars, int x, int y)
 		{
 			if (vars->map[y][x] == 'G')
 			{
-				t_ghost *new_ghost = malloc(sizeof(t_ghost));
-				if (!new_ghost)
-				   	return (write(2, "Error\nMalloc fail\n", 19));
-				init_ghost(vars, new_ghost, x, y);
-				if (!vars->ghost)
-					vars->ghost = new_ghost;
-				else
-					last->next = new_ghost;
-				last = new_ghost;
+				init_ghost(vars, &last, x, y);
 			}
 			x++;
 		}
 		y++;
 	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:54:20 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/20 18:07:09 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/24 17:01:34 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,20 @@ int	check_side(char **map)
 
 int	check_map(char **map)
 {
+	int	exit;
+	int	start;
+	int	collect;
+
+	exit = 0;
+	start = 0;
+	collect = 0;
 	if (check_rectangular(map) == -1)
 		return (-1);
 	if (check_side(map) == -1)
+		return (-1);
+	if (check_condition(map, exit, start, collect) == -1)
+		return (-1);
+	if (checkpath(map))
 		return (-1);
 	return (1);
 }

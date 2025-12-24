@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 18:31:11 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/20 15:57:45 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/24 13:35:03 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	animate_hook(t_vars	*va, t_animated_var *av)
 	}
 	mlx_put_image_to_window(va->sprite->mlx, va->sprite->win,
 		va->sprite->img[va->sprite->frame], va->sprite->x, va->sprite->y);
+	is_dead(va);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 16:00:19 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/20 16:48:43 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/24 16:11:57 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,3 +55,13 @@ void	ft_clear(t_vars *vars)
 	vars->ghost = NULL;
 }
 
+void	free_0(t_vars *vars)
+{
+	if (!vars)
+		return ;
+	if (vars->map)
+		free_map(vars->map);
+	if (vars->animated_var)
+		free(vars->animated_var);
+	free(vars);
+}
