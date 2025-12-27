@@ -67,19 +67,15 @@ int	init_ghost(t_vars *vars, t_ghost **last, int x, int y)
 	int		h;
 	t_ghost	*new_ghost;
 
-	new_ghost = malloc(sizeof(t_ghost));
+	new_ghost = calloc(1, sizeof(t_ghost));
 	if (!new_ghost)
 		return (write(2, "Error\nMalloc fail\n", 19), close_hook(vars), 0);
 	new_ghost->x = x * 31;
 	new_ghost->y = y * 31;
-	new_ghost->moving = 0;
-	new_ghost->dir = 0;
-	new_ghost->step = 0;
 	new_ghost->start_x = x * 31;
 	new_ghost->start_y = y * 31;
 	new_ghost->img = mlx_xpm_file_to_image(vars->mlx,
 			"./src/textures/ghost/0.xpm", &w, &h);
-	new_ghost->next = NULL;
 	mlx_put_image_to_window(vars->mlx, vars->mlx_win,
 		new_ghost->img, new_ghost->x, new_ghost->y);
 	if (!vars->ghost)

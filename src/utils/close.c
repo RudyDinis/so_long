@@ -6,19 +6,14 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:32:36 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/24 16:15:28 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/27 15:06:34 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-int	close_hook(void *param)
+void	close_hook2(t_vars *vars)
 {
-	t_vars	*vars;
-
-	vars = param;
-	if (!vars)
-		return (0);
 	if (vars->sprite)
 		clear_sprite(vars->sprite);
 	if (vars->img.img)
@@ -29,6 +24,18 @@ int	close_hook(void *param)
 		mlx_destroy_window(vars->mlx, vars->mlx_win);
 	if (vars->map)
 		free_map(vars->map);
+	if (vars->exit)
+		free(vars->exit);
+}
+
+int	close_hook(void *param)
+{
+	t_vars	*vars;
+
+	vars = param;
+	if (!vars)
+		return (0);
+	close_hook2(vars);
 	if (vars->mlx)
 	{
 		mlx_loop_end(vars->mlx);

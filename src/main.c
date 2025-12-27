@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:32:36 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/24 16:17:25 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/27 19:15:48 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,27 +75,29 @@ int	key_clic(int keycode, void *param)
 	t_vars	*vars;
 
 	vars = (t_vars *)param;
+	if (keycode == 65307)
+		close_hook(vars);
 	if (keycode == 97)
-		return (check_eat(vars, 0), moove(vars, 0), 0);
+		return (check_eat(vars, 0), moove(vars, 0), is_eat_all(vars), 0);
 	else if (keycode == 100)
-		return (check_eat(vars, 1), moove(vars, 1), 0);
+		return (check_eat(vars, 1), moove(vars, 1), is_eat_all(vars), 0);
 	else if (keycode == 119)
-		return (check_eat(vars, 2), moove(vars, 2), 0);
+		return (check_eat(vars, 2), moove(vars, 2), is_eat_all(vars), 0);
 	else if (keycode == 115)
-		return (check_eat(vars, 3), moove(vars, 3), 0);
+		return (check_eat(vars, 3), moove(vars, 3), is_eat_all(vars), 0);
 	return (0);
 }
 
 int	init(t_vars *vars, char **argv)
 {
 	int		height;
-	char	**map;
 	int		x;
 	int		y;
 
 	x = 0;
 	y = 0;
 	vars->map = load_map(argv[1], &height);
+	vars->collectible = count_collect(vars->map);
 	vars->height = height;
 	vars->mlx = mlx_init();
 	vars->mlx_win = mlx_new_window(vars->mlx, ft_strlen(vars->map[0]) * 31,
@@ -103,12 +105,12 @@ int	init(t_vars *vars, char **argv)
 	vars->sprite = setup_animation(vars->mlx, vars->mlx_win);
 	mlx_loop_hook(vars->mlx, animate_hook_var, vars);
 	setup_sprite(vars);
-	vars->img = draw_map(*vars);
+	vars->img = draw_map(vars);
 	vars->score = 0;
 	vars->moove = 0;
 	vars->ghost = NULL;
 	setup_ghost(vars, x, y);
-	if (check_map(vars->map) == -1)
+	if (check_map(vars->map, argv[1]) == -1)
 		return (write(2, "Error\nMap not valid\n", 20), close_hook(vars));
 	return (1);
 }
