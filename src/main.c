@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:32:36 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/27 19:15:48 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/29 19:12:09 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,13 @@ void	check_eat(t_vars *vars, int dir)
 	dy[3] = 1;
 	tx = vars->sprite->x / 31 + dx[dir];
 	ty = vars->sprite->y / 31 + dy[dir];
-	if (vars->map[ty][tx] != '1')
-	{
-		vars->moove += 1;
-		random_moove(vars);
-	}
 	if (vars->map[ty][tx] == 'C')
 	{
 		vars->map[ty][tx] = '0';
 		vars->score += 1;
 	}
+	if (vars->map[ty][tx] == 'E')
+		is_eat_all(vars, 1);
 }
 
 int	key_clic(int keycode, void *param)
@@ -78,17 +75,17 @@ int	key_clic(int keycode, void *param)
 	if (keycode == 65307)
 		close_hook(vars);
 	if (keycode == 97)
-		return (check_eat(vars, 0), moove(vars, 0), is_eat_all(vars), 0);
+		return (check_eat(vars, 0), moove(vars, 0), is_eat_all(vars, 0), 0);
 	else if (keycode == 100)
-		return (check_eat(vars, 1), moove(vars, 1), is_eat_all(vars), 0);
+		return (check_eat(vars, 1), moove(vars, 1), is_eat_all(vars, 0), 0);
 	else if (keycode == 119)
-		return (check_eat(vars, 2), moove(vars, 2), is_eat_all(vars), 0);
+		return (check_eat(vars, 2), moove(vars, 2), is_eat_all(vars, 0), 0);
 	else if (keycode == 115)
-		return (check_eat(vars, 3), moove(vars, 3), is_eat_all(vars), 0);
+		return (check_eat(vars, 3), moove(vars, 3), is_eat_all(vars, 0), 0);
 	return (0);
 }
 
-int	init(t_vars *vars, char **argv)
+void	init(t_vars *vars, char **argv)
 {
 	int		height;
 	int		x;
@@ -96,23 +93,22 @@ int	init(t_vars *vars, char **argv)
 
 	x = 0;
 	y = 0;
-	vars->map = load_map(argv[1], &height);
+	vars->mlx = mlx_init();
+	vars->map = load_map(argv[1], &height, vars);
 	vars->collectible = count_collect(vars->map);
 	vars->height = height;
-	vars->mlx = mlx_init();
 	vars->mlx_win = mlx_new_window(vars->mlx, ft_strlen(vars->map[0]) * 31,
 			height * 31, "");
-	vars->sprite = setup_animation(vars->mlx, vars->mlx_win);
+	vars->sprite = setup_animation(vars->mlx, vars->mlx_win, vars);
 	mlx_loop_hook(vars->mlx, animate_hook_var, vars);
 	setup_sprite(vars);
+	if (check_map(vars->map, argv[1]) == -1)
+		return (write(1, "Error\nMap not valid\n", 20), free_0(vars), exit(1));
 	vars->img = draw_map(vars);
 	vars->score = 0;
 	vars->moove = 0;
 	vars->ghost = NULL;
 	setup_ghost(vars, x, y);
-	if (check_map(vars->map, argv[1]) == -1)
-		return (write(2, "Error\nMap not valid\n", 20), close_hook(vars));
-	return (1);
 }
 
 int	main(int argc, char **argv)
@@ -120,13 +116,13 @@ int	main(int argc, char **argv)
 	t_vars	*vars;
 
 	if (argc != 2)
-		return (write(2, "Error\nMissing Map\n", 19));
+		return (write(1, "Error\nMissing Map\n", 18));
 	vars = malloc(sizeof(t_vars));
 	if (!vars)
-		return (write(2, "Error\nMalloc fail\n", 19));
+		return (write(1, "Error\nMalloc fail\n", 18));
 	vars->animated_var = malloc(sizeof(t_animated_var));
 	if (!vars->animated_var)
-		return (write(2, "Error\nMalloc fail\n", 19), free_0(vars), 0);
+		return (write(1, "Error\nMalloc fail\n", 18), free_1(vars), 0);
 	srand(time(NULL));
 	init(vars, argv);
 	mlx_key_hook(vars->mlx_win, key_clic, vars);

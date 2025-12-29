@@ -59,6 +59,7 @@ void	random_moove(t_vars *vars)
 			current->img, current->x, current->y);
 		current = current->next;
 	}
+	vars->moove += 1;
 }
 
 int	init_ghost(t_vars *vars, t_ghost **last, int x, int y)
@@ -76,6 +77,8 @@ int	init_ghost(t_vars *vars, t_ghost **last, int x, int y)
 	new_ghost->start_y = y * 31;
 	new_ghost->img = mlx_xpm_file_to_image(vars->mlx,
 			"./src/textures/ghost/0.xpm", &w, &h);
+	if (!new_ghost->img)
+		return (write(1, "Error\nimage not found\n", 22), close_hook(vars), 0);
 	mlx_put_image_to_window(vars->mlx, vars->mlx_win,
 		new_ghost->img, new_ghost->x, new_ghost->y);
 	if (!vars->ghost)

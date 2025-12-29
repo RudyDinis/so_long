@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 16:00:19 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/27 15:09:28 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/29 18:50:35 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	free_map(char **map)
 	i = 0;
 	if (!map)
 		return ;
-	while (map[i])
+	while (map[i] && map[i][0] != '\0')
 		free(map[i++]);
 	free(map);
 }
@@ -59,8 +59,27 @@ void	free_0(t_vars *vars)
 {
 	if (!vars)
 		return ;
+	if (vars->sprite)
+		clear_sprite(vars->sprite);
+	if (vars->mlx_win)
+		mlx_destroy_window(vars->mlx, vars->mlx_win);
 	if (vars->map)
 		free_map(vars->map);
+	if (vars->mlx)
+	{
+		mlx_loop_end(vars->mlx);
+		mlx_destroy_display(vars->mlx);
+		free(vars->mlx);
+	}
+	if (vars->animated_var)
+		free(vars->animated_var);
+	free(vars);
+}
+
+void	free_1(t_vars *vars)
+{
+	if (!vars)
+		return ;
 	if (vars->animated_var)
 		free(vars->animated_var);
 	free(vars);

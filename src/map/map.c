@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 16:06:01 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/26 17:05:16 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/29 19:33:07 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,20 @@ int	count_lines(char *file)
 	int		count;
 	char	*line;
 
+	count = 0;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (0);
-	count = 0;
+		return (count);
 	line = get_next_line(fd);
 	while (line)
 	{
-		count++;
+		if (ft_strlen(line) > 1)
+			count++;
 		free(line);
 		line = get_next_line(fd);
 	}
 	close(fd);
 	return (count);
-}
-
-char	**alloc_map(int height)
-{
-	char	**map;
-
-	map = malloc(sizeof(char *) * (height + 1));
-	if (!map)
-		return (NULL);
-	map[height] = NULL;
-	return (map);
 }
 
 char	**make_map_copy(char *file)
@@ -53,7 +43,7 @@ char	**make_map_copy(char *file)
 	int		height;
 
 	height = count_lines(file);
-	map = alloc_map(height);
+	map = ft_calloc((size_t)(height + 1), sizeof(char *));
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (NULL);
@@ -61,9 +51,9 @@ char	**make_map_copy(char *file)
 	line = get_next_line(fd);
 	while (line)
 	{
-		map[i] = ft_strtrim(line, "\n");
+		if (ft_strlen(line) > 1)
+			map[i++] = ft_strtrim(line, "\n");
 		free(line);
-		i++;
 		line = get_next_line(fd);
 	}
 	close(fd);
@@ -92,7 +82,7 @@ int	count_collect(char **map)
 	return (collectible);
 }
 
-char	**load_map(char *file, int *height)
+char	**load_map(char *file, int *height, t_vars *vars)
 {
 	int		fd;
 	int		i;
@@ -100,17 +90,21 @@ char	**load_map(char *file, int *height)
 	char	**map;
 
 	*height = count_lines(file);
-	map = alloc_map(*height);
+	if (*height == 0)
+		return (write(1, "Error\nMap not valid\n", 20)
+			, free_1(vars), exit(0), NULL);
+	map = ft_calloc((size_t)(*height + 1), sizeof(char *));
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (NULL);
+		return (free_1(vars), exit(0), NULL);
 	i = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
-		map[i] = ft_strtrim(line, "\n");
+		if (ft_strlen(line) > 1)
+			map[i++] = ft_strtrim(line, "\n");
 		free(line);
-		i++;
+		check_size(line, i, vars, map);
 		line = get_next_line(fd);
 	}
 	close(fd);

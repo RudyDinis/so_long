@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:31:43 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/27 14:46:47 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/29 13:37:13 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,11 @@ void	is_dead(t_vars	*vars)
 	}
 }
 
-void	is_eat_all(t_vars	*vars)
+void	is_eat_all(t_vars	*vars, int status)
 {
 	if (vars->score == vars->collectible)
 	{
-		if (vars->sprite->x / 31 == vars->exit->x
-			&& vars->sprite->y / 31 == vars->exit->y)
+		if (status == 1)
 			close_hook(vars);
 		game_exit(vars->img, *vars, vars->exit->x * 31, vars->exit->y * 31);
 	}

@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:59:51 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/26 17:18:38 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/29 18:31:55 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	fill(char **tab, t_point size, int row, int col)
 		return ;
 	if (tab[row][col] == '1' || tab[row][col] == 'F')
 		return ;
-
 	tab[row][col] = 'F';
 	fill(tab, size, row - 1, col);
 	fill(tab, size, row + 1, col);
@@ -33,7 +32,7 @@ t_point	find_player(char **map)
 	int		x;
 
 	y = 0;
-	while (map[y])
+	while (map[y] && map[y][0] != '\0')
 	{
 		x = 0;
 		while (map[y][x])
@@ -59,7 +58,7 @@ int	exit_reachable(char **map)
 	int	x;
 
 	y = 0;
-	while (map[y])
+	while (map[y] && map[y][0] != '\0')
 	{
 		x = 0;
 		while (map[y][x])
@@ -80,7 +79,7 @@ int	checkpath(char **map)
 	int		height;
 
 	height = 0;
-	while (map[height])
+	while (map[height] && map[height][0] != '\0')
 		height++;
 	size.y = height;
 	size.x = ft_strlen(map[0]);
@@ -90,7 +89,6 @@ int	checkpath(char **map)
 	fill(map, size, begin.y, begin.x);
 	if (exit_reachable(map))
 		return (0);
-
 	return (1);
 }
 
@@ -101,7 +99,7 @@ int	check_condition(char **map, int exit, int start, int collect)
 
 	x = 0;
 	y = 0;
-	while (map[y])
+	while (map[y] && map[y][0] != '\0')
 	{
 		x = 0;
 		while (map[y][x])

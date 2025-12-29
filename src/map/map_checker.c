@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:54:20 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/27 13:41:02 by rdinis           ###   ########.fr       */
+/*   Updated: 2025/12/29 18:38:37 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	check_rectangular(char **map)
 
 	len = ft_strlen(map[0]);
 	i = 0;
-	while (map[i])
+	while (map[i] && map[i][0] != '\0')
 	{
 		if ((int)ft_strlen(map[i]) != len)
 			return (-1);
@@ -54,7 +54,7 @@ int	check_side(char **map)
 	x = 0;
 	y = 1;
 	height = 0;
-	while (map[height])
+	while (map[height] && map[height][0] != '\0')
 		height++;
 	width = ft_strlen(map[0]);
 	while (x < width)
@@ -84,13 +84,13 @@ int	check_map(char **map, char *file)
 	start = 0;
 	collect = 0;
 	if (check_rectangular(map_copy) == -1)
-		return (free_map(map_copy), -1);
+		return (printf("ici\n"), free_map(map_copy), -1);
 	if (check_side(map_copy) == -1)
-		return (free_map(map_copy), -1);
+		return (printf("ici\n"), free_map(map_copy), -1);
 	if (check_condition(map_copy, exit, start, collect) == -1)
-		return (free_map(map_copy), -1);
+		return (printf("ici\n"), free_map(map_copy), -1);
 	if (checkpath(map_copy))
-		return (free_map(map_copy), -1);
+		return (printf("ici\n"), free_map(map_copy), -1);
 	free_map(map_copy);
 	return (1);
 }
