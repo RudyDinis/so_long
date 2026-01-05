@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:32:36 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/29 18:50:44 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/05 15:29:45 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,12 @@ void	close_hook2(t_vars *vars)
 {
 	if (vars->sprite)
 		clear_sprite(vars->sprite);
-	if (vars->img.img)
-		mlx_destroy_image(vars->mlx, vars->img.img);
 	if (vars->ghost)
 		ft_clear(vars);
 	if (vars->mlx_win)
 		mlx_destroy_window(vars->mlx, vars->mlx_win);
 	if (vars->map)
 		free_map(vars->map);
-	if (vars->exit)
-		free(vars->exit);
 }
 
 int	close_hook(void *param)

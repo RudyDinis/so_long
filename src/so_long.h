@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 16:05:59 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/29 19:19:24 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/05 17:20:14 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct s_vars
 	int				collectible;
 	long			moove;
 	long			score;
+	void			*wall_img[17];
 	t_data			img;
 	t_anim			*sprite;
 	t_ghost			*ghost;
@@ -112,43 +113,42 @@ int		check_map(char **map, char *file);
 t_anim	*setup_animation(void *mlx, void *win, t_vars *vars);
 t_data	draw_map(t_vars *vars);
 void	setup_sprite(t_vars *vars);
-void	left_top(t_data img, t_vars vars, int x, int y);
-void	left_bottom(t_data img, t_vars vars, int x, int y);
-void	right_bottom(t_data img, t_vars vars, int x, int y);
-void	right_top(t_data img, t_vars vars, int x, int y);
+void	left_top(t_vars vars, int x, int y);
+void	left_bottom(t_vars vars, int x, int y);
+void	right_bottom(t_vars vars, int x, int y);
+void	right_top(t_vars vars, int x, int y);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	horizontal(t_data img, t_vars vars, int x, int y);
-void	vertical(t_data img, t_vars vars, int x, int y);
-void	end_bottom(t_data img, t_vars vars, int x, int y);
-void	end_top(t_data img, t_vars vars, int x, int y);
-void	end_right(t_data img, t_vars vars, int x, int y);
-void	end_left(t_data img, t_vars vars, int x, int y);
-void	t_left(t_data img, t_vars vars, int x, int y);
-void	t_right(t_data img, t_vars vars, int x, int y);
-void	t_top(t_data img, t_vars vars, int x, int y);
-void	t_bottom(t_data img, t_vars vars, int x, int y);
-void	t_cross(t_data img, t_vars vars, int x, int y);
-int		t_cross_two(int x, int y, int size_y, int size_x);
-void	no_cross(t_data img, t_vars vars, int x, int y);
+void	horizontal(t_vars vars, int x, int y);
+void	vertical(t_vars vars, int x, int y);
+void	end_bottom(t_vars vars, int x, int y);
+void	end_top(t_vars vars, int x, int y);
+void	end_right(t_vars vars, int x, int y);
+void	end_left(t_vars vars, int x, int y);
+void	t_left(t_vars vars, int x, int y);
+void	t_right(t_vars vars, int x, int y);
+void	t_top(t_vars vars, int x, int y);
+void	t_bottom(t_vars vars, int x, int y);
+void	t_cross(t_vars vars, int x, int y);
+void	no_cross(t_vars vars, int x, int y);
 char	**load_map(char *file, int *height, t_vars *vars);
 int		count_lines(char *file);
-void	is_vertical_wall(t_data img, t_vars vars, int x, int y);
-void	is_lefttop_wall(t_data img, t_vars vars, int x, int y);
-void	is_leftbottom_wall(t_data img, t_vars vars, int x, int y);
-void	is_righttop_wall(t_data img, t_vars vars, int x, int y);
-void	is_rightbottom_wall(t_data img, t_vars vars, int x, int y);
+void	is_vertical_wall(t_vars vars, int x, int y);
+void	is_lefttop_wall(t_vars vars, int x, int y);
+void	is_leftbottom_wall(t_vars vars, int x, int y);
+void	is_righttop_wall(t_vars vars, int x, int y);
+void	is_rightbottom_wall(t_vars vars, int x, int y);
 int		is_endbottom(t_vars vars, int x, int y);
 int		is_endtop(t_vars vars, int x, int y);
 int		is_endleft(t_vars vars, int x, int y);
 int		is_endright(t_vars vars, int x, int y);
-void	is_t_left(t_data img, t_vars vars, int x, int y);
-void	is_t_right(t_data img, t_vars vars, int x, int y);
-void	is_t_top(t_data img, t_vars vars, int x, int y);
-void	is_t_bottom(t_data img, t_vars vars, int x, int y);
-void	is_t_cross(t_data img, t_vars vars, int x, int y);
-void	is_horizontal_wall(t_data img, t_vars vars, int x, int y);
-void	is_no_cross(t_data img, t_vars vars, int x, int y);
-void	background(t_data img, t_vars vars, int x, int y);
+void	is_t_left(t_vars vars, int x, int y);
+void	is_t_right(t_vars vars, int x, int y);
+void	is_t_top(t_vars vars, int x, int y);
+void	is_t_bottom(t_vars vars, int x, int y);
+void	is_t_cross(t_vars vars, int x, int y);
+void	is_horizontal_wall(t_vars vars, int x, int y);
+void	is_no_cross(t_vars vars, int x, int y);
+void	background(t_vars vars, int x, int y);
 void	clear_sprite(t_anim	*a);
 void	free_map(char **map);
 int		animate_hook_var(void *param);
@@ -168,5 +168,6 @@ void	is_eat_all(t_vars	*vars, int status);
 void	game_exit(t_data img, t_vars vars, int x, int y);
 void	free_1(t_vars *vars);
 void	check_size(char *line, int i, t_vars *vars, char **map);
+void	load_img(t_vars *vars);
 
 #endif

@@ -5,13 +5,13 @@ SRC = src/utils/gnl/get_next_line_utils.c src/utils/gnl/get_next_line.c \
 		src/sprite/sprite.c src/map/draw_map.c src/map/check_condition.c src/map/wall/angle.c \
 		src/map/wall/line.c src/map/wall/end.c src/map/wall/check_angle.c src/map/wall/check_end.c \
 		src/visual_info/draw_write.c src/utils/close.c src/ghost/ghost.c src/sprite/sprite_check.c \
-		src/map/wall/check_t.c src/map/wall/t.c src/map/wall/t_two.c  src/map/wall/check_square.c  \
-		src/map/wall/square.c src/map/draw_exit.c src/map/check_size.c
+		src/map/wall/check_t.c src/map/wall/t.c src/map/wall/check_square.c  \
+		src/map/wall/square.c src/map/draw_exit.c src/map/check_size.c src/map/wall/load.c
 
 OBJ := $(SRC:%.c=%.o)
 
 CC = cc -std=c11
-CFLAGS = -I . -Imlx_linux
+CFLAGS = -Wall -Wextra -Werror -I . -Imlx_linux
 
 all: $(NAME)
 

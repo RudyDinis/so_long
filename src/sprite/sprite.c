@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 18:31:11 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/29 15:44:37 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/05 17:16:06 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	animate_hook(t_vars	*va, t_animated_var *av)
 			va->sprite->moving = 0;
 			va->sprite->step = 0;
 			random_moove(va);
-			background(va->img, *va, va->sprite->x, va->sprite->y);
+			background(*va, va->sprite->x, va->sprite->y);
 			draw_ghosts(va);
 		}
 	}

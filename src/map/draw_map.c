@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 13:13:55 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/29 17:45:33 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/05 15:39:45 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,28 @@ void	setup_sprite(t_vars *vars)
 	}
 }
 
-void	select_wall(t_data img, t_vars vars, int x, int y)
+void	select_wall(t_vars vars, int x, int y)
 {
-	is_horizontal_wall(img, vars, x, y);
-	is_vertical_wall(img, vars, x, y);
-	is_t_left(img, vars, x, y);
-	is_t_right(img, vars, x, y);
-	is_t_top(img, vars, x, y);
-	is_t_bottom(img, vars, x, y);
-	is_t_cross(img, vars, x, y);
-	is_no_cross(img, vars, x, y);
-	is_lefttop_wall(img, vars, x, y);
-	is_leftbottom_wall(img, vars, x, y);
-	is_righttop_wall(img, vars, x, y);
-	is_rightbottom_wall(img, vars, x, y);
+	is_horizontal_wall(vars, x, y);
+	is_vertical_wall(vars, x, y);
+	is_t_left(vars, x, y);
+	is_t_right(vars, x, y);
+	is_t_top(vars, x, y);
+	is_t_bottom(vars, x, y);
+	is_t_cross(vars, x, y);
+	is_no_cross(vars, x, y);
+	is_lefttop_wall(vars, x, y);
+	is_leftbottom_wall(vars, x, y);
+	is_righttop_wall(vars, x, y);
+	is_rightbottom_wall(vars, x, y);
 	if (is_endbottom(vars, x, y))
-		end_bottom(img, vars, x * 31, y * 31);
+		end_bottom(vars, x * 31, y * 31);
 	else if (is_endtop(vars, x, y))
-		end_top(img, vars, x * 31, y * 31);
+		end_top(vars, x * 31, y * 31);
 	else if (is_endright(vars, x, y))
-		end_right(img, vars, x * 31, y * 31);
+		end_right(vars, x * 31, y * 31);
 	else if (is_endleft(vars, x, y))
-		end_left(img, vars, x * 31, y * 31);
+		end_left(vars, x * 31, y * 31);
 }
 
 void	collectible(t_data img, t_vars vars, int x, int y)
@@ -104,8 +104,7 @@ t_data	draw_map(t_vars *vars)
 	int		x;
 	t_data	img;
 
-	img.img = mlx_new_image(vars->mlx, ft_strlen(vars->map[0]) * 31,
-			vars->height * 31);
+	load_img(vars);
 	y = 0;
 	while (y < vars->height && vars->map[y])
 	{
@@ -113,9 +112,9 @@ t_data	draw_map(t_vars *vars)
 		while (vars->map[y][x])
 		{
 			if (vars->map[y][x] == '1')
-				select_wall(img, *vars, x, y);
+				select_wall(*vars, x, y);
 			if (vars->map[y][x] == 'C')
-				collectible(img, *vars, x * 31, y * 31);
+				//collectible(img, *vars, x * 31, y * 31);
 			if (vars->map[y][x] == 'E')
 				find_exit(vars, x, y);
 			x++;

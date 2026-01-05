@@ -6,13 +6,13 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 13:48:03 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/27 18:02:53 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/05 14:43:52 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../so_long.h"
 
-void	is_t_left(t_data img, t_vars vars, int x, int y)
+void	is_t_left(t_vars vars, int x, int y)
 {
 	char	left;
 	char	right;
@@ -31,10 +31,10 @@ void	is_t_left(t_data img, t_vars vars, int x, int y)
 	bottom = vars.map[y + 1][x];
 	top = vars.map[y - 1][x];
 	if (left != '1' && right == '1' && bottom == '1' && top == '1')
-		return (t_left(img, vars, x * 31, y * 31));
+		return (t_left(vars, x * 31, y * 31));
 }
 
-void	is_t_right(t_data img, t_vars vars, int x, int y)
+void	is_t_right(t_vars vars, int x, int y)
 {
 	char	left;
 	char	right;
@@ -53,10 +53,10 @@ void	is_t_right(t_data img, t_vars vars, int x, int y)
 	bottom = vars.map[y + 1][x];
 	top = vars.map[y - 1][x];
 	if (left == '1' && right != '1' && bottom == '1' && top == '1')
-		return (t_right(img, vars, x * 31, y * 31));
+		return (t_right(vars, x * 31, y * 31));
 }
 
-void	is_t_top(t_data img, t_vars vars, int x, int y)
+void	is_t_top(t_vars vars, int x, int y)
 {
 	char	left;
 	char	right;
@@ -75,10 +75,10 @@ void	is_t_top(t_data img, t_vars vars, int x, int y)
 	left = vars.map[y][x - 1];
 	bottom = vars.map[y + 1][x];
 	if (left == '1' && right == '1' && bottom == '1' && top != '1')
-		return (t_top(img, vars, x * 31, y * 31));
+		return (t_top(vars, x * 31, y * 31));
 }
 
-void	is_t_bottom(t_data img, t_vars vars, int x, int y)
+void	is_t_bottom(t_vars vars, int x, int y)
 {
 	char	left;
 	char	right;
@@ -97,10 +97,10 @@ void	is_t_bottom(t_data img, t_vars vars, int x, int y)
 	left = vars.map[y][x - 1];
 	top = vars.map[y - 1][x];
 	if (left == '1' && right == '1' && bottom != '1' && top == '1')
-		return (t_bottom(img, vars, x * 31, y * 31));
+		return (t_bottom(vars, x * 31, y * 31));
 }
 
-void	is_t_cross(t_data img, t_vars vars, int x, int y)
+void	is_t_cross(t_vars vars, int x, int y)
 {
 	char	left;
 	char	right;
@@ -116,5 +116,5 @@ void	is_t_cross(t_data img, t_vars vars, int x, int y)
 	left = vars.map[y][x - 1];
 	top = vars.map[y - 1][x];
 	if (left == '1' && right == '1' && bottom == '1' && top == '1')
-		return (t_cross(img, vars, x * 31, y * 31));
+		return (t_cross(vars, x * 31, y * 31));
 }

@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:54:20 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/29 18:38:37 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/05 14:27:31 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,13 @@ int	check_map(char **map, char *file)
 	start = 0;
 	collect = 0;
 	if (check_rectangular(map_copy) == -1)
-		return (printf("ici\n"), free_map(map_copy), -1);
+		return (free_map(map_copy), -1);
 	if (check_side(map_copy) == -1)
-		return (printf("ici\n"), free_map(map_copy), -1);
+		return (free_map(map_copy), -1);
 	if (check_condition(map_copy, exit, start, collect) == -1)
-		return (printf("ici\n"), free_map(map_copy), -1);
+		return (free_map(map_copy), -1);
 	if (checkpath(map_copy))
-		return (printf("ici\n"), free_map(map_copy), -1);
+		return (free_map(map_copy), -1);
 	free_map(map_copy);
 	return (1);
 }

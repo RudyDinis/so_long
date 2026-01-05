@@ -6,7 +6,7 @@
 /*   By: rdinis <rdinis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 19:04:46 by rdinis            #+#    #+#             */
-/*   Updated: 2025/12/29 19:44:02 by rdinis           ###   ########.fr       */
+/*   Updated: 2026/01/05 14:28:26 by rdinis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	free_size(t_vars *vars, char **map)
 	while (map[i])
 		free(map[i++]);
 	free(map);
+	write(1, "Error\nMap too long\n", 19);
 	exit(0);
 }
 
